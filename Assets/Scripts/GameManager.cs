@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager thisManager = null;  
     [SerializeField] private Text Txt_Score = null;
     [SerializeField] private Text Txt_Message = null;
-    private int Score = 0;
+    private float Score = 0;
 
     void Start()
     {
@@ -18,13 +18,23 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        StartCoroutine(WaitScore());
         if (Time.timeScale == 0 && Input.GetKeyDown(KeyCode.Return))
             StartGame();
     }
 
-    public void UpdateScore(int value)
+    IEnumerator WaitScore()
     {
-        Score += value;
+        if (Time.timeScale == 1)
+        {
+            yield return new WaitForSeconds(1);
+            UpdateScore();
+        }
+}
+
+public void UpdateScore()
+{
+        Score++;
         Txt_Score.text = "SCORE : " + Score;
     }
 
